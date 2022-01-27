@@ -1,3 +1,4 @@
+import time
 from envs import REGISTRY as env_REGISTRY
 from functools import partial
 from components.episode_buffer import EpisodeBatch
@@ -45,7 +46,7 @@ class EpisodeRunner:
         self.env.reset()
         self.t = 0
 
-    def run(self, test_mode=False):
+    def run(self, test_mode=False, render=False):
         self.reset()
 
         terminated = False
@@ -54,6 +55,9 @@ class EpisodeRunner:
 
         while not terminated:
 
+            if render:
+                self.env.render()
+                time.sleep(0.1)
             pre_transition_data = {
                 "state": [self.env.get_state()],
                 "avail_actions": [self.env.get_avail_actions()],

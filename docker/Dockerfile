@@ -29,6 +29,7 @@ RUN pip3 install numpy scipy pyyaml matplotlib
 RUN pip3 install imageio
 RUN pip3 install tensorboard-logger
 RUN pip3 install pygame
+RUN pip3 install supersuit==3.3.0 Pettingzoo==1.13.1
 
 RUN mkdir /install
 WORKDIR /install

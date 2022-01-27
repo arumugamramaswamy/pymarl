@@ -1,6 +1,7 @@
 import datetime
 import os
 import pprint
+from runners.episode_runner import EpisodeRunner
 import time
 import threading
 import torch as th
@@ -210,6 +211,12 @@ def run_sequential(args, logger):
             last_log_T = runner.t_env
 
     runner.close_env()
+
+    
+    runner = EpisodeRunner(args=args, logger=logger)
+    runner.setup(scheme, groups, preprocess, mac)
+    runner.reset()
+    runner.run(render=True)
     logger.console_logger.info("Finished Training")
 
 
