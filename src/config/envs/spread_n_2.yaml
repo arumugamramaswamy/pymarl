@@ -1,7 +1,7 @@
 env: spread
 
 env_args:
-  N: 3
+  N: 2
 
 test_greedy: True
 test_nepisode: 32
