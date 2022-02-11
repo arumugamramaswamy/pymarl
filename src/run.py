@@ -67,7 +67,7 @@ def run(_run, _config, _log):
 def evaluate_sequential(args, runner):
 
     for _ in range(args.test_nepisode):
-        runner.run(test_mode=True)
+        runner.run(test_mode=True, render=True)
 
     if args.save_replay:
         runner.save_replay()
@@ -211,12 +211,6 @@ def run_sequential(args, logger):
             last_log_T = runner.t_env
 
     runner.close_env()
-
-    
-    runner = EpisodeRunner(args=args, logger=logger)
-    runner.setup(scheme, groups, preprocess, mac)
-    runner.reset()
-    runner.run(render=True)
     logger.console_logger.info("Finished Training")
 
 
