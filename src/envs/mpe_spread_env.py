@@ -5,9 +5,11 @@ import numpy as np
 
 class SimpleSpreadEnv(MultiAgentEnv):
 
-    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, **kwargs) -> None:
+    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, agent_indicator=False, **kwargs) -> None:
         super().__init__()
         env = simple_spread_v2.parallel_env(N=N, max_cycles=episode_limit, local_ratio=local_ratio)
+        if agent_indicator:
+            env = ss.agent_indicator_v0(env)
         self.env = ss.pettingzoo_env_to_vec_env_v0(env)
         self.observation = self.env.reset()
         self.n_actions = 5
