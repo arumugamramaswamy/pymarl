@@ -3,14 +3,29 @@ from pettingzoo.mpe import simple_spread_v2
 import supersuit as ss
 import numpy as np
 
+
 class SimpleSpreadEnv(MultiAgentEnv):
 
-    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, agent_indicator=False, **kwargs) -> None:
+    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, agent_indicator=False, target_specific_rewards=False, **kwargs) -> None:
         super().__init__()
         env = simple_spread_v2.parallel_env(N=N, max_cycles=episode_limit, local_ratio=local_ratio)
+        world = env.aec_env.env.env.world
         if agent_indicator:
             env = ss.agent_indicator_v0(env)
-        self.env = ss.pettingzoo_env_to_vec_env_v0(env)
+        env = ss.pettingzoo_env_to_vec_env_v0(env)
+        if target_specific_rewards is not None:
+            assert local_ratio == 0, "collisions currently not supported with target specific rewards"
+
+            def target_specific_reward_fn(_):
+                rew = 0
+                for l, a in zip(world.landmarks, world.agents):
+                    dist = np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
+                    rew -= dist
+                return [rew] * N
+
+            env = ss.reward_lambda_v0(env, target_specific_reward_fn)
+
+        self.env = env
         self.observation = self.env.reset()
         self.n_actions = 5
         self.N = N
