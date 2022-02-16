@@ -1,0 +1,17 @@
+env: spread
+
+env_args:
+  N: 2
+  local_ratio: 0
+  agent_indicator: True
+
+
+test_greedy: True
+test_nepisode: 32
+test_interval: 10000
+log_interval: 10000
+runner_log_interval: 10000
+learner_log_interval: 10000
+t_max: 2050000
+save_model: True
+save_model_interval: 50000

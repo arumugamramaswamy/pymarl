@@ -21,7 +21,7 @@ class SimpleSpreadEnv(MultiAgentEnv):
                 for l, a in zip(world.landmarks, world.agents):
                     dist = np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
                     rew -= dist
-                return [rew] * N
+                return np.array([rew] * N)
 
             env = ss.reward_lambda_v0(env, target_specific_reward_fn)
 
