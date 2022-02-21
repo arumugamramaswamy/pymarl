@@ -4,16 +4,42 @@ import supersuit as ss
 import numpy as np
 
 
+
 class SimpleSpreadEnv(MultiAgentEnv):
 
-    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, agent_indicator=False, target_specific_rewards=False, **kwargs) -> None:
+    def __init__(self, N=3, episode_limit=25, local_ratio=0.5, agent_indicator=False, target_specific_rewards=False, shuffle=False, **kwargs) -> None:
         super().__init__()
         env = simple_spread_v2.parallel_env(N=N, max_cycles=episode_limit, local_ratio=local_ratio)
         world = env.aec_env.env.env.world
+
+        if shuffle:
+            LANDMARKS_POS_START = 4
+            LANDMARKS_POS_END = LANDMARKS_POS_START + 2*N
+            OTHER_AGENT_POS_START = LANDMARKS_POS_END
+            OTHER_AGENT_POS_END = OTHER_AGENT_POS_START + 2 * (N-1)
+
+            def extractor_fn(obs, _):
+                print(obs)
+                start = obs[:LANDMARKS_POS_START]
+                landmarks_pos = obs[LANDMARKS_POS_START: LANDMARKS_POS_END]
+                landmarks_pos = landmarks_pos.reshape((N, 2))
+                np.random.shuffle(landmarks_pos)
+                landmarks_pos = landmarks_pos.reshape(2*N)
+                other_agents_pos = obs[OTHER_AGENT_POS_START: OTHER_AGENT_POS_END]
+                other_agents_pos = other_agents_pos.reshape((N-1, 2))
+                other_agents_pos = other_agents_pos.reshape(2*N-2)
+                np.random.shuffle(other_agents_pos)
+                rest = obs[OTHER_AGENT_POS_END:]
+                print(np.concatenate([start, landmarks_pos, other_agents_pos, rest]))
+                return np.concatenate([start, landmarks_pos, other_agents_pos, rest])
+
+            env = ss.observation_lambda_v0(env, extractor_fn, lambda x: x)
+
         if agent_indicator:
             env = ss.agent_indicator_v0(env)
-        env = ss.pettingzoo_env_to_vec_env_v0(env)
-        if target_specific_rewards is not None:
+
+        env = ss.pettingzoo_env_to_vec_env_v1(env)
+        if target_specific_rewards:
             assert local_ratio == 0, "collisions currently not supported with target specific rewards"
 
             def target_specific_reward_fn(_):
