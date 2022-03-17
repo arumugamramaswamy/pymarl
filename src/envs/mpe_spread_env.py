@@ -19,7 +19,6 @@ class SimpleSpreadEnv(MultiAgentEnv):
             OTHER_AGENT_POS_END = OTHER_AGENT_POS_START + 2 * (N-1)
 
             def extractor_fn(obs, _):
-                print(obs)
                 start = obs[:LANDMARKS_POS_START]
                 landmarks_pos = obs[LANDMARKS_POS_START: LANDMARKS_POS_END]
                 landmarks_pos = landmarks_pos.reshape((N, 2))
@@ -30,7 +29,6 @@ class SimpleSpreadEnv(MultiAgentEnv):
                 other_agents_pos = other_agents_pos.reshape(2*N-2)
                 np.random.shuffle(other_agents_pos)
                 rest = obs[OTHER_AGENT_POS_END:]
-                print(np.concatenate([start, landmarks_pos, other_agents_pos, rest]))
                 return np.concatenate([start, landmarks_pos, other_agents_pos, rest])
 
             env = ss.observation_lambda_v0(env, extractor_fn, lambda x: x)

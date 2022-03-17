@@ -1,4 +1,4 @@
-checkpoint_path: /home/aru/fyp/pymarl/results/models/spread_n_2_no_collide_w_indicator_w_target_specific_rewards
+checkpoint_path: /home/aru/fyp/pymarl/results/models/spread_n_2_no_collide_shuffle
 evaluate: True
 # --- COMA specific parameters ---
 
