@@ -6,10 +6,18 @@ class RNNAgent(nn.Module):
     def __init__(self, input_shape, args):
         super(RNNAgent, self).__init__()
         self.args = args
+        extra_layer = self.args.__dict__.get("extra_layer", False)
 
         self.fc1 = nn.Linear(input_shape, args.rnn_hidden_dim)
         self.rnn = nn.GRUCell(args.rnn_hidden_dim, args.rnn_hidden_dim)
-        self.fc2 = nn.Linear(args.rnn_hidden_dim, args.n_actions)
+        if extra_layer:
+            self.fc2 = nn.Sequential(
+                nn.Linear(args.rnn_hidden_dim, args.rnn_hidden_dim),
+                nn.ReLU(),
+                nn.Linear(args.rnn_hidden_dim, args.n_actions),
+            )
+        else:
+            self.fc2 = nn.Linear(args.rnn_hidden_dim, args.n_actions)
 
     def init_hidden(self):
         # make hidden states on same device as model
