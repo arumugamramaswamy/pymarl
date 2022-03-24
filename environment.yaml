@@ -94,4 +94,7 @@ dependencies:
     - whichcraft==0.6.1
     - wrapt==1.14.0
     - zipp==3.7.0
+    - tensorboard-logger==0.1.0
+
+
 prefix: /home/aru/miniconda3/envs/fyp
