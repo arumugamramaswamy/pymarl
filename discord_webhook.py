@@ -17,7 +17,7 @@ data = {}
 data["embeds"] = [
     {
         "description" : f"{sys.argv[1]}",
-        "title" : "Experiment Completed"
+        "title" : "Experiment"
     }
 ]
 
