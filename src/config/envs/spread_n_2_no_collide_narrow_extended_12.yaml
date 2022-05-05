@@ -1,0 +1,19 @@
+env: spread
+
+env_args:
+  N: 2
+  local_ratio: 0
+
+
+test_greedy: True
+test_nepisode: 32
+test_interval: 10000
+log_interval: 10000
+runner_log_interval: 10000
+learner_log_interval: 10000
+t_max: 12500000
+save_model: True
+save_model_interval: 50000
+rnn_hidden_dim: 16
+
+name: "spread_n_2_no_collide_narrow_extended_12"
