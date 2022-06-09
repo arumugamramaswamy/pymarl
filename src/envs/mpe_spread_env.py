@@ -20,14 +20,17 @@ class SimpleSpreadEnv(MultiAgentEnv):
 
             def extractor_fn(obs, _):
                 start = obs[:LANDMARKS_POS_START]
+
                 landmarks_pos = obs[LANDMARKS_POS_START: LANDMARKS_POS_END]
                 landmarks_pos = landmarks_pos.reshape((N, 2))
                 np.random.shuffle(landmarks_pos)
                 landmarks_pos = landmarks_pos.reshape(2*N)
+
                 other_agents_pos = obs[OTHER_AGENT_POS_START: OTHER_AGENT_POS_END]
                 other_agents_pos = other_agents_pos.reshape((N-1, 2))
-                other_agents_pos = other_agents_pos.reshape(2*N-2)
                 np.random.shuffle(other_agents_pos)
+                other_agents_pos = other_agents_pos.reshape(2*N-2)
+
                 rest = obs[OTHER_AGENT_POS_END:]
                 return np.concatenate([start, landmarks_pos, other_agents_pos, rest])
 
